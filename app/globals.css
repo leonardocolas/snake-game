@@ -1,0 +1,167 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@theme inline {
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --font-sans: var(--font-display);
+  --font-mono: var(--font-display);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Neutrals: deep CRT glass */
+  --background: oklch(0.15 0.014 165);
+  --foreground: oklch(0.9 0.13 152);
+  --card: oklch(0.2 0.02 165);
+  --card-foreground: oklch(0.9 0.13 152);
+  --popover: oklch(0.2 0.02 165);
+  --popover-foreground: oklch(0.9 0.13 152);
+  --muted: oklch(0.26 0.022 165);
+  --muted-foreground: oklch(0.62 0.06 155);
+
+  /* Primary: phosphor green */
+  --primary: oklch(0.82 0.2 148);
+  --primary-foreground: oklch(0.16 0.03 160);
+
+  --secondary: oklch(0.26 0.022 165);
+  --secondary-foreground: oklch(0.9 0.13 152);
+
+  /* Accent: amber, used only for food + level-up */
+  --accent: oklch(0.79 0.16 78);
+  --accent-foreground: oklch(0.16 0.03 160);
+
+  --destructive: oklch(0.63 0.2 25);
+  --destructive-foreground: oklch(0.97 0.02 90);
+
+  --border: oklch(0.82 0.2 148 / 18%);
+  --input: oklch(0.82 0.2 148 / 22%);
+  --ring: oklch(0.82 0.2 148 / 55%);
+
+  --radius: 0.25rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Signature element: phosphor bloom */
+  .text-glow {
+    text-shadow: 0 0 0.35em oklch(0.82 0.2 148 / 55%);
+  }
+  .text-glow-accent {
+    text-shadow: 0 0 0.35em oklch(0.79 0.16 78 / 60%);
+  }
+  .box-glow {
+    box-shadow:
+      0 0 0 1px oklch(0.82 0.2 148 / 25%),
+      0 0 2.5rem oklch(0.82 0.2 148 / 12%) inset,
+      0 0 4rem oklch(0.82 0.2 148 / 8%);
+  }
+
+  /* CRT scanlines + vignette over the playfield */
+  .crt::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 15;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      oklch(0 0 0 / 16%) 0px,
+      oklch(0 0 0 / 16%) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+  .crt::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 15;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 60%,
+      oklch(0 0 0 / 38%) 100%
+    );
+  }
+
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.72;
+    }
+  }
+  .animate-flicker {
+    animation: flicker 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.94) translateY(0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  .animate-pop-in {
+    animation: pop-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, -2.25rem) scale(1.35);
+    }
+  }
+  .animate-rise {
+    animation: rise 0.75s ease-out forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-flicker,
+    .animate-pop-in,
+    .animate-rise {
+      animation: none;
+    }
+  }
+}
